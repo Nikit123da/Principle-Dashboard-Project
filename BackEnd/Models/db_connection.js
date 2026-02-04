@@ -1,0 +1,14 @@
+const mysql = require('mysql'); 
+
+//TODO: paste your localhost, username, and password to connect to the db
+
+const con = mysql.createConnection({
+  host: "localhost",
+  user: "yourusername",
+  password: "yourpassword"
+});
+
+con.connect(function(err) {
+  if (err) throw err;
+  console.log("Connected!");
+});
