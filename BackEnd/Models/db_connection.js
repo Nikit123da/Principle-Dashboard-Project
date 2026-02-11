@@ -19,4 +19,4 @@ db_connection.connect((err) => {
   // connection.end(); // Close connection when done
 });
 
-module.exports = db_connection;
+module.exports = {db_connection};

@@ -1,15 +1,17 @@
-const db_connection = require("../Models/db_connection")
-
-const insertAllStudents = (async () => {
+const {db_connection} = require("../Models/db_connection")
+const XLSX = require("xlsx");
+const insertAllStudents = async () => {
     let connection;
     try {
-        connection = await db_connection.db_connection;
+        connection = await db_connection;
 
         // only for development, to prevent duplicate entries
         await connection.execute('DELETE FROM students');
         await connection.execute('ALTER TABLE students AUTO_INCREMENT = 1'); // reset autoincrement (=so will start from 1 and not prev=)
 
         const filePath = './assets/studentsGrades.xlsx';
+        
+        
         const workbook = XLSX.readFile(filePath);
         const sheet = workbook.Sheets[workbook.SheetNames[0]];
 
@@ -29,7 +31,7 @@ const insertAllStudents = (async () => {
             const classYear = row['שכבה'] || '';
             const classNum = row['כיתה'] || 0;
 
-            const sql = 'INSERT INTO students (firstName, lastName, class-year, class) VALUES (?, ?, ?, ?)';
+            const sql = 'INSERT INTO students (firstName, lastName, class_year, class) VALUES (?, ?, ?, ?)';
 
             try {
                 await connection.execute(sql, [firstName, lastName, classYear, classNum]);
@@ -40,11 +42,11 @@ const insertAllStudents = (async () => {
 
         console.log('all students processed successfully');
     } catch (err) {
-        console.error('error:', err.message);
+        console.error('error: SU', err.message);
     } finally {
-        if (connection) await connection.end();
+        // if (connection) await connection.end();
     }
-});
+};
 
 const getAllStudents = (async () => {
     
